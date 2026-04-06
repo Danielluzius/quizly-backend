@@ -17,12 +17,14 @@ YouTube URL → yt-dlp (audio) → FFMPEG → Whisper AI (transcription) → Gem
 ## Setup
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/Danielluzius/quizly-backend.git
    cd quizly-backend
    ```
 
 2. Create and activate the virtual environment:
+
    ```bash
    python -m venv .venv
    .venv\Scripts\activate   # Windows
@@ -30,18 +32,22 @@ YouTube URL → yt-dlp (audio) → FFMPEG → Whisper AI (transcription) → Gem
    ```
 
 3. Install dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
 
 4. Create a `.env` file based on `.env.example`:
+
    ```
    SECRET_KEY="your-django-secret-key"
    GEMINI_API_KEY="your-gemini-api-key"
    ```
+
    Get a Gemini API key at: https://aistudio.google.com
 
 5. Run migrations:
+
    ```bash
    python manage.py migrate
    ```
@@ -55,17 +61,17 @@ The API will be available at `http://127.0.0.1:8000/api/`
 
 ## API Endpoints
 
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| POST | `/api/register/` | Register new user | No |
-| POST | `/api/login/` | Login, sets JWT cookies | No |
-| POST | `/api/logout/` | Logout, clears cookies | Yes |
-| POST | `/api/token/refresh/` | Refresh access token | Cookie |
-| POST | `/api/quizzes/` | Generate quiz from YouTube URL | Yes |
-| GET | `/api/quizzes/` | List all user quizzes | Yes |
-| GET | `/api/quizzes/{id}/` | Get a specific quiz | Yes |
-| PATCH | `/api/quizzes/{id}/` | Update title/description | Yes |
-| DELETE | `/api/quizzes/{id}/` | Delete a quiz | Yes |
+| Method | Endpoint              | Description                    | Auth   |
+| ------ | --------------------- | ------------------------------ | ------ |
+| POST   | `/api/register/`      | Register new user              | No     |
+| POST   | `/api/login/`         | Login, sets JWT cookies        | No     |
+| POST   | `/api/logout/`        | Logout, clears cookies         | Yes    |
+| POST   | `/api/token/refresh/` | Refresh access token           | Cookie |
+| POST   | `/api/quizzes/`       | Generate quiz from YouTube URL | Yes    |
+| GET    | `/api/quizzes/`       | List all user quizzes          | Yes    |
+| GET    | `/api/quizzes/{id}/`  | Get a specific quiz            | Yes    |
+| PATCH  | `/api/quizzes/{id}/`  | Update title/description       | Yes    |
+| DELETE | `/api/quizzes/{id}/`  | Delete a quiz                  | Yes    |
 
 ## Frontend
 
