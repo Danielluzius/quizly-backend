@@ -31,3 +31,10 @@ def download_audio(url):
         info = ydl.extract_info(url, download=True)
         ext = info.get('ext', 'webm')
     return os.path.join(tempfile.gettempdir(), f'{video_id}.{ext}')
+
+
+def transcribe_audio(file_path):
+    """Transcribe an audio file using Whisper AI and return the transcript string."""
+    model = whisper.load_model('base')
+    result = model.transcribe(file_path)
+    return result['text']
