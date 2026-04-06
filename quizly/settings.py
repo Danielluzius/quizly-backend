@@ -47,6 +47,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5500',
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'users.authentication.CookieJWTAuthentication',
