@@ -71,3 +71,23 @@ def generate_quiz(transcript):
     raw = re.sub(r'^```(?:json)?\s*', '', raw)
     raw = re.sub(r'\s*```$', '', raw)
     return json.loads(raw)
+
+
+def save_quiz(data, user, url):
+    """Persist the generated quiz and its questions to the database."""
+    video_id = extract_video_id(url)
+    canonical_url = f'https://www.youtube.com/watch?v={video_id}'
+    quiz = Quiz.objects.create(
+        user=user,
+        title=data['title'],
+        description=data.get('description', ''),
+        video_url=canonical_url,
+    )
+    for q in data['questions']:
+        Question.objects.create(
+            quiz=quiz,
+            question_title=q['question_title'],
+            question_options=q['question_options'],
+            answer=q['answer'],
+        )
+    return quiz
