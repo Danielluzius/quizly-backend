@@ -15,3 +15,19 @@ def extract_video_id(url):
     if not match:
         raise ValueError(f'Could not extract video ID from URL: {url}')
     return match.group(1)
+
+
+def download_audio(url):
+    """Download audio from a YouTube URL and return the temp file path."""
+    video_id = extract_video_id(url)
+    tmp_filename = os.path.join(tempfile.gettempdir(), f'{video_id}.%(ext)s')
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'outtmpl': tmp_filename,
+        'quiet': True,
+        'noplaylist': True,
+    }
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(url, download=True)
+        ext = info.get('ext', 'webm')
+    return os.path.join(tempfile.gettempdir(), f'{video_id}.{ext}')
