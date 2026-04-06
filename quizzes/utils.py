@@ -40,37 +40,58 @@ def transcribe_audio(file_path):
     return result['text']
 
 
+_QUIZ_PROMPT_TEMPLATE = (
+    'Based on the following transcript, generate a quiz in valid JSON format.\n\n'
+    'The quiz must follow this exact structure:\n'
+    '{{\n'
+    '  "title": "Create a concise quiz title based on the topic of the transcript.",\n'
+    '  "description": "Summarize the transcript in no more than 150 characters. Do not include any quiz questions or answers.",\n'
+    '  "questions": [\n'
+    '    {{\n'
+    '      "question_title": "The question goes here.",\n'
+    '      "question_options": ["Option A", "Option B", "Option C", "Option D"],\n'
+    '      "answer": "The correct answer from the above options"\n'
+    '    }},\n'
+    '    ...\n'
+    '    (exactly 10 questions)\n'
+    '  ]\n'
+    '}}\n\n'
+    'Requirements:\n'
+    '- Each question must have exactly 4 distinct answer options.\n'
+    '- Only one correct answer is allowed per question, and it must be present in question_options.\n'
+    "- The output must be valid JSON and parsable as-is (e.g., using Python's json.loads).\n"
+    '- Do not include explanations, comments, or any text outside the JSON.\n\n'
+    'Transcript:\n{transcript}'
+)
+
+
+def build_quiz_prompt(transcript):
+    """Build and return the Gemini prompt string for quiz generation."""
+    return _QUIZ_PROMPT_TEMPLATE.format(transcript=transcript)
+
+
 def generate_quiz(transcript):
     """Send transcript to Gemini and return parsed quiz data as a dict."""
     client = genai.Client()
-    prompt = (
-        'Based on the following transcript, generate a quiz in valid JSON format.\n\n'
-        'The quiz must follow this exact structure:\n'
-        '{\n'
-        '  "title": "Create a concise quiz title based on the topic of the transcript.",\n'
-        '  "description": "Summarize the transcript in no more than 150 characters. Do not include any quiz questions or answers.",\n'
-        '  "questions": [\n'
-        '    {\n'
-        '      "question_title": "The question goes here.",\n'
-        '      "question_options": ["Option A", "Option B", "Option C", "Option D"],\n'
-        '      "answer": "The correct answer from the above options"\n'
-        '    },\n'
-        '    ...\n'
-        '    (exactly 10 questions)\n'
-        '  ]\n'
-        '}\n\n'
-        'Requirements:\n'
-        '- Each question must have exactly 4 distinct answer options.\n'
-        '- Only one correct answer is allowed per question, and it must be present in question_options.\n'
-        '- The output must be valid JSON and parsable as-is (e.g., using Python\'s json.loads).\n'
-        '- Do not include explanations, comments, or any text outside the JSON.\n\n'
-        f'Transcript:\n{transcript}'
+    response = client.models.generate_content(
+        model='gemini-2.0-flash',
+        contents=build_quiz_prompt(transcript),
     )
-    response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
     raw = response.text.strip()
     raw = re.sub(r'^```(?:json)?\s*', '', raw)
     raw = re.sub(r'\s*```$', '', raw)
     return json.loads(raw)
+
+
+def create_questions(quiz, questions_data):
+    """Create Question objects in the database for the given quiz."""
+    for q in questions_data:
+        Question.objects.create(
+            quiz=quiz,
+            question_title=q['question_title'],
+            question_options=q['question_options'],
+            answer=q['answer'],
+        )
 
 
 def save_quiz(data, user, url):
@@ -83,11 +104,5 @@ def save_quiz(data, user, url):
         description=data.get('description', ''),
         video_url=canonical_url,
     )
-    for q in data['questions']:
-        Question.objects.create(
-            quiz=quiz,
-            question_title=q['question_title'],
-            question_options=q['question_options'],
-            answer=q['answer'],
-        )
+    create_questions(quiz, data['questions'])
     return quiz
