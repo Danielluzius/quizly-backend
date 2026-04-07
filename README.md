@@ -6,7 +6,17 @@ Django REST API that generates quizzes from YouTube videos using Whisper AI and 
 
 ## Pipeline
 
-YouTube URL → yt-dlp (audio) → FFMPEG → Whisper AI (transcription) → Gemini Flash (quiz generation) → DB
+```
+YouTube URL → yt-dlp → FFMPEG → Whisper AI → Gemini Flash → Database
+```
+
+| Step | Tool             | What it does                                                                             |
+| ---- | ---------------- | ---------------------------------------------------------------------------------------- |
+| 1    | **yt-dlp**       | Downloads the audio track from the YouTube video                                         |
+| 2    | **FFMPEG**       | Converts the downloaded audio into a format Whisper can process                          |
+| 3    | **Whisper AI**   | Transcribes the audio locally into text (runs on your machine, no API needed)            |
+| 4    | **Gemini Flash** | Receives the transcript and generates a quiz with 10 questions and 4 answer options each |
+| 5    | **Database**     | Stores the quiz and its questions, linked to the user who created it                     |
 
 ## Requirements
 
@@ -95,6 +105,7 @@ Open with Live Server in VS Code. The frontend expects the backend at `http://12
 You can test all endpoints directly using [Postman](https://www.postman.com/) or any HTTP client.
 
 **Example: Register a user**
+
 ```http
 POST http://127.0.0.1:8000/api/register/
 Content-Type: application/json
@@ -108,6 +119,7 @@ Content-Type: application/json
 ```
 
 **Example: Login**
+
 ```http
 POST http://127.0.0.1:8000/api/login/
 Content-Type: application/json
@@ -117,9 +129,11 @@ Content-Type: application/json
   "password": "testpassword123"
 }
 ```
+
 > The JWT cookies are set automatically in the response. Make sure your HTTP client sends cookies with subsequent requests.
 
 **Example: Generate a quiz**
+
 ```http
 POST http://127.0.0.1:8000/api/quizzes/
 Content-Type: application/json
