@@ -55,7 +55,12 @@ YouTube-URL → yt-dlp (Audio) → FFMPEG → Whisper AI (Transkription) → Gem
    python manage.py migrate
    ```
 
-6. Entwicklungsserver starten:
+6. Admin-Benutzer erstellen (optional, für das Django Admin-Panel unter `/admin/`):
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+7. Entwicklungsserver starten:
    ```bash
    python manage.py runserver
    ```
