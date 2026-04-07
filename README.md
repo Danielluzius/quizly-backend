@@ -1,5 +1,7 @@
 # Quizly Backend
 
+🌐 Language: **English** | [Deutsch](README.de.md)
+
 Django REST API that generates quizzes from YouTube videos using Whisper AI and Gemini.
 
 ## Pipeline
