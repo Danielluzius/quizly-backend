@@ -13,6 +13,7 @@ YouTube URL → yt-dlp (audio) → FFMPEG → Whisper AI (transcription) → Gem
   ```
   winget install ffmpeg
   ```
+- **yt-dlp** is used for downloading YouTube audio and is installed automatically via `requirements.txt`
 
 ## Setup
 
