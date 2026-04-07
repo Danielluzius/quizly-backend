@@ -1,9 +1,9 @@
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .models import Quiz
-from .serializers import QuizSerializer
-from .utils import download_audio, transcribe_audio, generate_quiz, save_quiz
+from quizzes_app.models import Quiz
+from quizzes_app.api.serializers import QuizSerializer
+from quizzes_app.utils import download_audio, transcribe_audio, generate_quiz, save_quiz
 import os
 
 

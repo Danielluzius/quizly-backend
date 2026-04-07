@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
 from .serializers import RegisterSerializer
-from .utils import set_auth_cookies, delete_auth_cookies
+from auth_app.utils import set_auth_cookies, delete_auth_cookies
 from django.conf import settings
 
 

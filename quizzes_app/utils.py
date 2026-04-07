@@ -5,7 +5,7 @@ import tempfile
 import yt_dlp
 import whisper
 from google import genai
-from .models import Quiz, Question
+from quizzes_app.models import Quiz, Question
 
 
 def extract_video_id(url):

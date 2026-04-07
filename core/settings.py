@@ -27,8 +27,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
-    'users',
-    'quizzes',
+    'auth_app',
+    'quizzes_app',
 ]
 
 MIDDLEWARE = [
@@ -51,7 +51,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'users.authentication.CookieJWTAuthentication',
+        'auth_app.authentication.CookieJWTAuthentication',
     ),
 }
 
@@ -67,7 +67,7 @@ SIMPLE_JWT = {
     'AUTH_COOKIE_SECURE': False,
 }
 
-ROOT_URLCONF = 'quizly.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -84,7 +84,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'quizly.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
