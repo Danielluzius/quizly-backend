@@ -15,8 +15,8 @@ class QuizViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
 
     def get_queryset(self):
-        """Return only quizzes belonging to the authenticated user."""
-        return Quiz.objects.filter(user=self.request.user)
+        """Return only quizzes belonging to the authenticated user, newest first."""
+        return Quiz.objects.filter(user=self.request.user).order_by('-created_at')
 
     def create(self, request):
         """Run the full pipeline: URL → audio → transcript → quiz → DB."""
