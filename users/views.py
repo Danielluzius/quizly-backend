@@ -15,6 +15,7 @@ class RegisterView(APIView):
     """Register a new user account."""
 
     def post(self, request):
+        """Validate input and create a new user account."""
         serializer = RegisterSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -26,6 +27,7 @@ class LoginView(APIView):
     """Authenticate a user and set JWT cookies."""
 
     def post(self, request):
+        """Authenticate user credentials and set JWT cookies."""
         username = request.data.get('username')
         password = request.data.get('password')
         user = authenticate(request, username=username, password=password)
@@ -46,6 +48,7 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        """Blacklist the refresh token and delete auth cookies."""
         refresh_cookie = settings.SIMPLE_JWT.get('AUTH_COOKIE_REFRESH', 'refresh_token')
         raw_refresh = request.COOKIES.get(refresh_cookie)
         try:
@@ -61,6 +64,7 @@ class TokenRefreshView(APIView):
     """Issue a new access token using the refresh token cookie."""
 
     def post(self, request):
+        """Issue a new access token from the refresh token cookie."""
         refresh_cookie = settings.SIMPLE_JWT.get('AUTH_COOKIE_REFRESH', 'refresh_token')
         raw_refresh = request.COOKIES.get(refresh_cookie)
         if not raw_refresh:

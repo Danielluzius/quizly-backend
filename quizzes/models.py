@@ -13,6 +13,7 @@ class Quiz(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
+        """Return the quiz title as string representation."""
         return self.title
 
 
@@ -27,4 +28,5 @@ class Question(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
+        """Return the question title as string representation."""
         return self.question_title
