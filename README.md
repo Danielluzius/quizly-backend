@@ -56,6 +56,7 @@ YouTube URL → yt-dlp (audio) → FFMPEG → Whisper AI (transcription) → Gem
    ```
 
 6. Create an admin user (optional, for the Django admin panel at `/admin/`):
+
    ```bash
    python manage.py createsuperuser
    ```
@@ -88,3 +89,42 @@ git clone https://github.com/Developer-Akademie-Backendkurs/project.Quizly front
 ```
 
 Open with Live Server in VS Code. The frontend expects the backend at `http://127.0.0.1:8000`.
+
+## Testing the API without a Frontend
+
+You can test all endpoints directly using [Postman](https://www.postman.com/) or any HTTP client.
+
+**Example: Register a user**
+```http
+POST http://127.0.0.1:8000/api/register/
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "test@example.com",
+  "password": "testpassword123",
+  "confirmed_password": "testpassword123"
+}
+```
+
+**Example: Login**
+```http
+POST http://127.0.0.1:8000/api/login/
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "testpassword123"
+}
+```
+> The JWT cookies are set automatically in the response. Make sure your HTTP client sends cookies with subsequent requests.
+
+**Example: Generate a quiz**
+```http
+POST http://127.0.0.1:8000/api/quizzes/
+Content-Type: application/json
+
+{
+  "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+}
+```
