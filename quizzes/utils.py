@@ -73,9 +73,9 @@ def build_quiz_prompt(transcript):
 
 def generate_quiz(transcript):
     """Send transcript to Gemini and return parsed quiz data as a dict."""
-    client = genai.Client()
+    client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
     response = client.models.generate_content(
-        model='gemini-2.0-flash',
+        model='gemini-2.5-flash',
         contents=build_quiz_prompt(transcript),
     )
     raw = response.text.strip()
