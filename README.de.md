@@ -64,17 +64,17 @@ Die API ist dann erreichbar unter: `http://127.0.0.1:8000/api/`
 
 ## API-Endpunkte
 
-| Methode | Endpunkt              | Beschreibung                        | Auth   |
-| ------- | --------------------- | ----------------------------------- | ------ |
-| POST    | `/api/register/`      | Neuen Benutzer registrieren         | Nein   |
-| POST    | `/api/login/`         | Anmelden, setzt JWT-Cookies         | Nein   |
-| POST    | `/api/logout/`        | Abmelden, löscht Cookies            | Ja     |
-| POST    | `/api/token/refresh/` | Access-Token erneuern               | Cookie |
-| POST    | `/api/quizzes/`       | Quiz aus YouTube-URL generieren     | Ja     |
-| GET     | `/api/quizzes/`       | Alle eigenen Quizze abrufen         | Ja     |
-| GET     | `/api/quizzes/{id}/`  | Einzelnes Quiz abrufen              | Ja     |
-| PATCH   | `/api/quizzes/{id}/`  | Titel/Beschreibung aktualisieren    | Ja     |
-| DELETE  | `/api/quizzes/{id}/`  | Quiz löschen                        | Ja     |
+| Methode | Endpunkt              | Beschreibung                     | Auth   |
+| ------- | --------------------- | -------------------------------- | ------ |
+| POST    | `/api/register/`      | Neuen Benutzer registrieren      | Nein   |
+| POST    | `/api/login/`         | Anmelden, setzt JWT-Cookies      | Nein   |
+| POST    | `/api/logout/`        | Abmelden, löscht Cookies         | Ja     |
+| POST    | `/api/token/refresh/` | Access-Token erneuern            | Cookie |
+| POST    | `/api/quizzes/`       | Quiz aus YouTube-URL generieren  | Ja     |
+| GET     | `/api/quizzes/`       | Alle eigenen Quizze abrufen      | Ja     |
+| GET     | `/api/quizzes/{id}/`  | Einzelnes Quiz abrufen           | Ja     |
+| PATCH   | `/api/quizzes/{id}/`  | Titel/Beschreibung aktualisieren | Ja     |
+| DELETE  | `/api/quizzes/{id}/`  | Quiz löschen                     | Ja     |
 
 ## Frontend
 
