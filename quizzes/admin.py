@@ -7,6 +7,7 @@ class QuestionInline(admin.TabularInline):
 
     model = Question
     extra = 0
+    fields = ['question_title', 'question_options', 'answer']
 
 
 @admin.register(Quiz)
@@ -14,4 +15,7 @@ class QuizAdmin(admin.ModelAdmin):
     """Admin configuration for the Quiz model."""
 
     list_display = ['title', 'user', 'created_at']
+    list_filter = ['user', 'created_at']
+    search_fields = ['title', 'description']
+    readonly_fields = ['video_url', 'created_at', 'updated_at']
     inlines = [QuestionInline]
