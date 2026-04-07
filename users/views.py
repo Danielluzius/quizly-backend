@@ -1,5 +1,4 @@
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -55,7 +54,8 @@ class LogoutView(APIView):
             RefreshToken(raw_refresh).blacklist()
         except Exception:
             pass
-        response = Response({'detail': 'Log-Out successfully! All Tokens will be deleted. Refresh token is now invalid.'})
+        detail = 'Log-Out successfully! All Tokens will be deleted. Refresh token is now invalid.'
+        response = Response({'detail': detail})
         delete_auth_cookies(response)
         return response
 
