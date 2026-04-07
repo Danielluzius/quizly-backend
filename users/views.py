@@ -53,7 +53,7 @@ class LogoutView(APIView):
         raw_refresh = request.COOKIES.get(refresh_cookie)
         try:
             RefreshToken(raw_refresh).blacklist()
-        except (TokenError, Exception):
+        except Exception:
             pass
         response = Response({'detail': 'Log-Out successfully! All Tokens will be deleted. Refresh token is now invalid.'})
         delete_auth_cookies(response)
