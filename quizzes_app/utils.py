@@ -17,20 +17,40 @@ def extract_video_id(url):
     return match.group(1)
 
 
+_BROWSERS = ['chrome', 'firefox', 'edge', 'safari', 'opera', 'brave']
+
+
 def download_audio(url):
-    """Download audio from a YouTube URL and return the temp file path."""
+    """Download audio from a YouTube URL and return the temp file path.
+
+    Tries without cookies first, then retries with each installed browser's
+    cookies until one succeeds.
+    """
     video_id = extract_video_id(url)
     tmp_filename = os.path.join(tempfile.gettempdir(), f'{video_id}.%(ext)s')
-    ydl_opts = {
+
+    base_opts = {
         'format': 'bestaudio/best',
         'outtmpl': tmp_filename,
         'quiet': True,
         'noplaylist': True,
     }
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=True)
-        ext = info.get('ext', 'webm')
-    return os.path.join(tempfile.gettempdir(), f'{video_id}.{ext}')
+
+    attempts = [{}] + [{'cookiesfrombrowser': (browser,)} for browser in _BROWSERS]
+    last_error = None
+
+    for extra in attempts:
+        try:
+            ydl_opts = {**base_opts, **extra}
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                info = ydl.extract_info(url, download=True)
+                ext = info.get('ext', 'webm')
+            return os.path.join(tempfile.gettempdir(), f'{video_id}.{ext}')
+        except yt_dlp.utils.DownloadError as e:
+            last_error = e
+            continue
+
+    raise last_error
 
 
 def transcribe_audio(file_path):
@@ -77,11 +97,11 @@ def generate_quiz(transcript):
     response = client.models.generate_content(
         model='gemini-2.5-flash',
         contents=build_quiz_prompt(transcript),
+        config=genai.types.GenerateContentConfig(
+            response_mime_type='application/json',
+        ),
     )
-    raw = response.text.strip()
-    raw = re.sub(r'^```(?:json)?\s*', '', raw)
-    raw = re.sub(r'\s*```$', '', raw)
-    return json.loads(raw)
+    return json.loads(response.text)
 
 
 def create_questions(quiz, questions_data):
